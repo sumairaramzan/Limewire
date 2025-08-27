@@ -8,12 +8,9 @@ import searchIcon from "../../images/search_file.svg";
 import addIcon from "../../images/add_new_songs.svg";
 import UploadSongPopup from "./UploadSongPopup";
 import AddSongsPopup from "./AddSongsPopup";
-import { Modal } from "react-bootstrap";
-import PopupPlayer from "./PopupPlayer";
 
-const LimewirePopup = ({ onClose }) => {
+const LimewirePopup = ({ onClose, onOpenPlayer }) => {
   const [activePopup, setActivePopup] = useState(null);
-  const [show, setShow] = useState(false);
 
   return (
     <div
@@ -48,7 +45,11 @@ const LimewirePopup = ({ onClose }) => {
       >
         <span style={{ color: "#fff", fontSize: "16px" }}>Limewire</span>
         <div style={{ display: "flex", gap: "4px" }}>
-          <img src={minimizeIcon} alt="min" style={{ width: 18, height: 18 }} />
+          <img
+            src={minimizeIcon}
+            alt="min"
+            style={{ width: 18, height: 18, cursor: "pointer" }}
+          />
           <img src={maximizeIcon} alt="max" style={{ width: 18, height: 18 }} />
           <img
             src={closeIcon}
@@ -64,7 +65,7 @@ const LimewirePopup = ({ onClose }) => {
         style={{
           flex: 1,
           display: "flex",
-          flexWrap: "wrap", // allows stacking on mobile
+          flexWrap: "wrap",
           overflow: "hidden",
         }}
       >
@@ -100,7 +101,14 @@ const LimewirePopup = ({ onClose }) => {
           {/* Folders */}
           <div style={{ flex: 1, padding: "8px" }}>
             <div style={{ fontSize: "15px", fontWeight: 600 }}>La Fortuna</div>
-            <div style={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: "8px" }}>
+            <div
+              style={{
+                marginTop: "10px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
+              }}
+            >
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                 <img src={folderIcon} alt="folder" style={{ width: 16, height: 16 }} />
                 RICH AND BROKE
@@ -222,14 +230,18 @@ const LimewirePopup = ({ onClose }) => {
                 <tbody>
                   <tr>
                     <td>1</td>
-                    <td onClick={() => setShow(true)}>See You Again.mp3</td>
+                    <td onClick={onOpenPlayer} style={{ cursor: "pointer" }}>
+                      See You Again.mp3
+                    </td>
                     <td>WAP: New Rap</td>
                     <td>Jan 15, 2025</td>
                     <td>3:15</td>
                   </tr>
                   <tr>
                     <td>2</td>
-                    <td>Shape of You.mp3</td>
+                    <td onClick={onOpenPlayer} style={{ cursor: "pointer" }}>
+                      Shape of You.mp3
+                    </td>
                     <td>Lost americana</td>
                     <td>Jan 18, 2025</td>
                     <td>2:10</td>
@@ -268,17 +280,6 @@ const LimewirePopup = ({ onClose }) => {
       {activePopup === "song" && (
         <AddSongsPopup show={true} handleClose={() => setActivePopup(null)} />
       )}
-
-      {/* Player Modal */}
-      <Modal
-        show={show}
-        onHide={() => setShow(false)}
-        size="lg"
-        centered
-        style={{ border: "2px solid #808080" }}
-      >
-        <PopupPlayer onClose={() => setShow(false)} />
-      </Modal>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import questionIcon from "../../images/questionmarkButton.svg";
 import closeIcon from "../../images/crossButton.svg";
 import leftIcon from "../../images/pc.svg";
 
-const LoginUpPopup = ({ onClose }) => {
+const LoginUpPopup = ({ onClose ,onOpenSignup}) => {
   const inputStyle = {
     width: "369px",
     height: "23px",
@@ -146,6 +146,15 @@ const LoginUpPopup = ({ onClose }) => {
         >
           <button style={win95Button}>Ok</button>
           <button style={win95Button}>Cancel</button>
+          <button
+            style={win95Button}
+            onClick={() => {
+              onClose();         // close login first
+              onOpenSignup();    // then open signup
+            }}
+          >
+            Sign up
+          </button>
         </div>
       </div>
     </div>
