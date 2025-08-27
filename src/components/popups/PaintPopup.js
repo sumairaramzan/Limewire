@@ -11,7 +11,16 @@ import zoomIcon from "../../limewire/Frame 167.svg";
 import rectIcon from "../../limewire/Frame 168.svg";
 import circleIcon from "../../limewire/Frame 169.svg";
 import shapeIcon from "../../limewire/Frame 170.svg";
-import cutIcon from "../../limewire/Frame 171.svg";
+import cutIcon1 from "../../limewire/Frame 171.svg";
+import cutIcon2 from "../../limewire/Frame 172.svg";
+import cutIcon3 from "../../limewire/Frame 173.svg";
+import cutIcon4 from "../../limewire/Frame 174.svg";
+import cutIcon5 from "../../limewire/Frame 175.svg";
+import cutIcon6 from "../../limewire/Frame 176.svg";
+import cutIcon7 from "../../limewire/Frame 177.svg";
+import cutIcon8 from "../../limewire/Frame 178.svg";
+import cutIcon9 from "../../limewire/Frame 179.svg";
+import cutIcon10 from "../../limewire/Frame 180.svg";
 
 // Sample canvas image
 import sampleCanvasImg from "../../images/mainimg.jpg";
@@ -24,14 +33,32 @@ const PaintPopup = ({ onClose }) => {
     { icon: rectIcon, name: "Rectangle" },
     { icon: circleIcon, name: "Circle" },
     { icon: shapeIcon, name: "Shape" },
-    { icon: cutIcon, name: "Cut" },
+    { icon: cutIcon1, name: "Cut 1" },
+    { icon: cutIcon2, name: "Cut 2" },
+    { icon: cutIcon3, name: "Cut 3" },
+    { icon: cutIcon4, name: "Cut 4" },
+    { icon: cutIcon5, name: "Cut 5" },
+    { icon: cutIcon6, name: "Cut 6" },
+    { icon: cutIcon7, name: "Cut 7" },
+    { icon: cutIcon8, name: "Cut 8" },
+    { icon: cutIcon9, name: "Cut 9" },
+    { icon: cutIcon10, name: "Cut 10" },
   ];
 
+  // Expanded palette (48 colors)
   const colors = [
-    "#000000", "#FFFFFF", "#808080", "#C0C0C0",
-    "#FF0000", "#800000", "#FFFF00", "#808000",
-    "#00FF00", "#008000", "#00FFFF", "#008080",
-    "#0000FF", "#000080", "#FF00FF", "#800080"
+    "#000000", "#808080", "#C0C0C0", "#FFFFFF",
+    "#800000", "#FF0000", "#FF8080", "#400000",
+    "#808000", "#FFFF00", "#FFFF80", "#404000",
+    "#008000", "#00FF00", "#80FF80", "#004000",
+    "#008080", "#00FFFF", "#80FFFF", "#004040",
+    "#000080", "#0000FF", "#8080FF", "#000040",
+    "#800080", "#FF00FF", "#FF80FF", "#400040",
+    "#804000", "#FF8000", "#FFC080", "#402000",
+    "#008040", "#00FF80", "#80FFC0", "#004020",
+    "#408080", "#40C0C0", "#80FFFF", "#204040",
+    "#404080", "#8080C0", "#C0C0FF", "#202040",
+    "#606060", "#A0A0A0", "#E0E0E0", "#303030"
   ];
 
   return (
@@ -41,8 +68,10 @@ const PaintPopup = ({ onClose }) => {
         top: "46%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        width: "500px",
-        height: "500px",
+        width: "70vw",
+        maxWidth: "700px",
+        height: "90vh",
+        maxHeight: "95vh",
         background: "#C0C0C0",
         border: "2px solid #000",
         display: "flex",
@@ -60,13 +89,13 @@ const PaintPopup = ({ onClose }) => {
       {/* Title bar */}
       <div
         style={{
-          height: "26px",
+          height: "32px",
           background: "linear-gradient(90deg, #000080 0%, #1084D0 100%)",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           color: "#fff",
-          fontSize: "13px",
+          fontSize: "14px",
           padding: "0 6px",
         }}
       >
@@ -74,76 +103,74 @@ const PaintPopup = ({ onClose }) => {
         <div style={{ display: "flex", gap: "6px" }}>
           <img src={mini} alt="-" style={{ cursor: "pointer" }} />
           <img src={maxi} alt="[]" style={{ cursor: "pointer" }} />
-          <img src={close} alt="X" style={{ cursor: "pointer" }} onClick={onClose} />
+          <img
+            src={close}
+            alt="X"
+            style={{ cursor: "pointer" }}
+            onClick={onClose}
+          />
         </div>
       </div>
 
       {/* Main area */}
-      <div style={{ flex: 1, display: "flex" }}>
+      <div style={{ flex: 1, display: "flex", minHeight: 0 }}>
         {/* Left toolbar */}
         <div
           style={{
             background: "#D4D0C8",
-            borderRight: "2px solid #808080",
             display: "grid",
-            gridTemplateColumns: "1fr 1fr", // 2-column layout
-            gridAutoRows: "40px",
-            padding: "4px",
-            gap: "4px",
-            height: "260px",
+            gridTemplateColumns: "1fr 1fr",
+            flexShrink: 0,
+            width: "80px",
+            overflowY: "auto",
+            gap: "0px",
           }}
         >
           {tools.map((tool, i) => (
             <div
               key={i}
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
                 cursor: "pointer",
+                display: "flex",
+                alignItems: "stretch",
+                justifyContent: "center",
+                border: "1px solid #A0A0A0",
               }}
               title={tool.name}
             >
-              <img src={tool.icon} alt={tool.name} />
+              <img
+                src={tool.icon}
+                alt={tool.name}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                }}
+              />
             </div>
           ))}
-
-          {/* Special bottom box */}
-          <div
-            style={{
-              gridColumn: "1 / span 2",
-              width: "47px",
-              height: "214px",
-              margin: "auto",
-              background: "#C3C3C3",
-              boxShadow: `
-                4px 4px 0px 0px #7E7E7E inset,
-                -2px -2px 0px 0px #F0F0F0 inset,
-                2px 2px 0px 0px #262626 inset
-              `,
-            }}
-          ></div>
         </div>
 
         {/* Canvas area */}
         <div
           style={{
             flex: 1,
-            background: "#FFC0CB",
+            background: "#fff",
             border: "2px inset #fff",
-            height: "400px",
-            overflow: "auto", // both horizontal + vertical scroll
+            overflow: "auto",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-          className="custom-scrollbar" // same styled scrollbar as Instagram popup
+          className="custom-scrollbar"
         >
           <img
             src={sampleCanvasImg}
             alt="Canvas"
             style={{
-              display: "block",
-              margin: "0 auto",
-              maxWidth: "800px",
-              maxHeight: "800px",
+              width: "100%",
+              height: "auto",
+              maxWidth: "1200px",
             }}
           />
         </div>
@@ -152,42 +179,36 @@ const PaintPopup = ({ onClose }) => {
       {/* Colors palette */}
       <div
         style={{
-          height: "70px",
-          display: "grid",
-          gridTemplateColumns: "repeat(8, 30px)", // fixed size per swatch
-          gridTemplateRows: "repeat(2, 30px)",
-          gap: "4px",
-          padding: "4px",
+          padding: "6px",
           background: "#C0C0C0",
           borderTop: "2px solid #808080",
-          justifyContent: "center",
-          alignContent: "center",
         }}
       >
-        {colors.map((c, i) => {
-          const isSpecial = i >= colors.length - 2; // last 2 boxes
-          return (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateRows: "repeat(2, 24px)", // ✅ only 2 rows
+            gridAutoFlow: "column",              // ✅ fill left → right
+            gap: "0",
+            justifyContent: "center",
+          }}
+        >
+          {colors.map((c, i) => (
             <div
               key={i}
               style={{
                 background: c,
+                width: "24px",
+                height: "24px",
                 cursor: "pointer",
-                width: "30px",
-                height: "30px",
-                boxShadow: isSpecial
-                  ? `
-                    4px 4px 0px 0px #7E7E7E inset,
-                    -2px -2px 0px 0px #F0F0F0 inset,
-                    2px 2px 0px 0px #262626 inset
-                  `
-                  : `
-                    -2px -2px 0px 0px #F0F0F0 inset,
-                    2px 2px 0px 0px #262626 inset
-                  `,
+                boxShadow: `
+                  -2px -2px 0px 0px #F0F0F0 inset,
+                  2px 2px 0px 0px #262626 inset
+                `,
               }}
-            ></div>
-          );
-        })}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

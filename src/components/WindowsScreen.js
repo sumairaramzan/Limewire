@@ -9,6 +9,8 @@ import LimewirePopup from "./popups/LimewirePopup";
 import PopupPlayer from "./popups/PopupPlayer";
 import PopupPlayerMinimized from "./popups/PopupPlayerMinimized";
 import InstagramPopup from "./popups/InstagramPopup";
+import insta from "../images/insta.svg"
+import paint from "../images/MS_Paint.svg"
 import PaintPopup from "./popups/PaintPopup";
 
 const WindowsScreen = () => {
@@ -109,7 +111,7 @@ const WindowsScreen = () => {
               }
             >
               <img
-                src={startIcon1}
+                src={insta}
                 alt="icon"
                 style={{ marginRight: "6px", width: "14px", height: "14px" }}
               />
@@ -127,7 +129,7 @@ const WindowsScreen = () => {
   }
 >
   <img
-    src={startIcon1}
+    src={paint}
     alt="icon"
     style={{ marginRight: "6px", width: "14px", height: "14px" }}
   />
