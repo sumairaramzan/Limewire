@@ -44,25 +44,22 @@ const LoginUpPopup = ({ onClose, onOpenSignup, onSuccess, registeredUser }) => {
     let newErrors = {};
     if (!form.email.trim()) newErrors.email = "Email required";
     if (!form.password) newErrors.password = "Password required";
-  
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-  
-    // Check credentials
+
     if (
       registeredUser &&
       form.email === registeredUser.email &&
       form.password === registeredUser.password
     ) {
-      onSuccess(registeredUser);   // ✅ handles redirect
-      // ❌ don't call onClose here
+      onSuccess(registeredUser); // ✅ redirect handled outside
     } else {
       setErrors({ password: "Invalid email or password" });
     }
   };
-  
 
   return (
     <div
@@ -105,6 +102,7 @@ const LoginUpPopup = ({ onClose, onOpenSignup, onSuccess, registeredUser }) => {
 
       {/* Body */}
       <div
+        className="popup-body"
         style={{
           flex: 1,
           display: "grid",
@@ -124,6 +122,7 @@ const LoginUpPopup = ({ onClose, onOpenSignup, onSuccess, registeredUser }) => {
           </div>
 
           <div
+            className="form-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "120px 1fr",
@@ -190,6 +189,23 @@ const LoginUpPopup = ({ onClose, onOpenSignup, onSuccess, registeredUser }) => {
           </button>
         </div>
       </div>
+
+      {/* Responsive styles */}
+      <style>
+        {`
+          @media (max-width: 600px) {
+            .popup-body {
+              grid-template-columns: 1fr !important;
+            }
+            .form-grid {
+              grid-template-columns: 1fr !important;
+            }
+            .form-grid label {
+              margin-bottom: 4px;
+            }
+          }
+        `}
+      </style>
     </div>
   );
 };

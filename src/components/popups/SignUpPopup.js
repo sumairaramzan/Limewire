@@ -10,8 +10,8 @@ const SignUpPopup = ({ onClose, onSuccess }) => {
 
   const inputStyle = {
     width: "100%",
-    height: "23px",
-    padding: "2px 4px",
+    height: "32px",
+    padding: "4px 6px",
     backgroundColor: "#FFFFFF",
     border: "1px solid #000000",
     borderTopColor: "#DFDFDF",
@@ -23,8 +23,9 @@ const SignUpPopup = ({ onClose, onSuccess }) => {
   };
 
   const win95Button = {
-    width: "100px",
-    height: "32px",
+    width: "100%",
+    minWidth: "80px",
+    height: "36px",
     backgroundColor: "#C3C7CB",
     border: "1px solid #000",
     boxShadow:
@@ -54,10 +55,7 @@ const SignUpPopup = ({ onClose, onSuccess }) => {
       return;
     }
 
-    // ✅ Pass user data to parent (WindowsScreen)
-    // Parent handles setting state + redirect to Limewire
-    onSuccess(form);
-    // ❌ don't call onClose here, it cancels the redirect
+    onSuccess(form); // ✅ parent handles redirect
   };
 
   return (
@@ -67,8 +65,8 @@ const SignUpPopup = ({ onClose, onSuccess }) => {
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        width: "753px",
-        height: "auto",
+        width: "95vw",
+        maxWidth: "750px",
         backgroundColor: "#C3C7CB",
         fontFamily: "MS Sans Serif, Tahoma, sans-serif",
         display: "flex",
@@ -84,9 +82,10 @@ const SignUpPopup = ({ onClose, onSuccess }) => {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "6px 8px",
+          fontSize: "16px",
         }}
       >
-        <span style={{ fontSize: "20px", fontWeight: 400 }}>Sign up</span>
+        <span>Sign up</span>
         <div style={{ display: "flex", gap: 6 }}>
           <img src={questionIcon} alt="help" style={{ width: 18, height: 18 }} />
           <img
@@ -100,29 +99,34 @@ const SignUpPopup = ({ onClose, onSuccess }) => {
 
       {/* Body */}
       <div
+        className="signup-body"
         style={{
           flex: 1,
           display: "grid",
           gridTemplateColumns: "56px 1fr 120px",
           gap: "16px",
           padding: "16px",
+          alignItems: "start",
         }}
       >
-        <div>
+        {/* Left Icon */}
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <img src={leftIcon} alt="pc" style={{ width: 40 }} />
         </div>
 
+        {/* Form */}
         <div>
           <div style={{ fontSize: "18px", marginBottom: "14px" }}>
             Create your account
           </div>
 
           <div
+            className="form-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "130px 1fr",
               columnGap: "12px",
-              rowGap: "10px",
+              rowGap: "12px",
               alignItems: "center",
             }}
           >
@@ -176,6 +180,7 @@ const SignUpPopup = ({ onClose, onSuccess }) => {
           </div>
         </div>
 
+        {/* Buttons */}
         <div
           style={{
             display: "flex",
@@ -191,6 +196,23 @@ const SignUpPopup = ({ onClose, onSuccess }) => {
           </button>
         </div>
       </div>
+
+      {/* Responsive styles */}
+      <style>
+        {`
+          @media (max-width: 600px) {
+            .signup-body {
+              grid-template-columns: 1fr !important;
+            }
+            .form-grid {
+              grid-template-columns: 1fr !important;
+            }
+            .form-grid label {
+              margin-bottom: 4px;
+            }
+          }
+        `}
+      </style>
     </div>
   );
 };
