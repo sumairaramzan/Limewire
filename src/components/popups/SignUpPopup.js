@@ -10,29 +10,30 @@ const SignUpPopup = ({ onClose, onSuccess }) => {
 
   const inputStyle = {
     width: "100%",
-    height: "32px",
-    padding: "4px 6px",
+    height: "clamp(34px, 6vh, 40px)",
+    padding: "6px 8px",
     backgroundColor: "#FFFFFF",
     border: "1px solid #000000",
     borderTopColor: "#DFDFDF",
     borderLeftColor: "#DFDFDF",
     outline: "none",
     fontFamily: "MS Sans Serif, Tahoma, sans-serif",
-    fontSize: "14px",
+    fontSize: "clamp(13px, 3.5vw, 15px)",
     boxSizing: "border-box",
   };
 
   const win95Button = {
     width: "100%",
-    minWidth: "80px",
-    height: "36px",
+    minWidth: 0,
+    height: "clamp(34px, 6.5vh, 40px)",
     backgroundColor: "#C3C7CB",
     border: "1px solid #000",
     boxShadow:
       "-4px -4px 0px #7E7E7E inset, 2px 2px 0px #F0F0F0 inset, -2px -2px 0px #262626 inset",
     cursor: "pointer",
     fontFamily: "MS Sans Serif, Tahoma, sans-serif",
-    fontSize: "14px",
+    fontSize: "clamp(13px, 3.5vw, 15px)",
+    lineHeight: 1.2,
   };
 
   const handleChange = (e) => {
@@ -41,7 +42,7 @@ const SignUpPopup = ({ onClose, onSuccess }) => {
   };
 
   const handleSubmit = () => {
-    let newErrors = {};
+    const newErrors = {};
     if (!form.username.trim()) newErrors.username = "Username required";
     if (!form.email.trim()) newErrors.email = "Email required";
     else if (!/\S+@\S+\.\S+/.test(form.email))
@@ -49,13 +50,11 @@ const SignUpPopup = ({ onClose, onSuccess }) => {
     if (!form.password) newErrors.password = "Password required";
     else if (form.password.length < 6)
       newErrors.password = "At least 6 characters";
-
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-
-    onSuccess(form); // ✅ parent handles redirect
+    onSuccess(form);
   };
 
   return (
@@ -65,8 +64,9 @@ const SignUpPopup = ({ onClose, onSuccess }) => {
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        width: "95vw",
-        maxWidth: "750px",
+        width: "min(95vw, 753px)",
+        maxHeight: "95vh",
+        overflow: "auto",
         backgroundColor: "#C3C7CB",
         fontFamily: "MS Sans Serif, Tahoma, sans-serif",
         display: "flex",
@@ -82,10 +82,11 @@ const SignUpPopup = ({ onClose, onSuccess }) => {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "6px 8px",
-          fontSize: "16px",
         }}
       >
-        <span>Sign up</span>
+        <span style={{ fontSize: "clamp(16px, 4.5vw, 20px)", fontWeight: 400 }}>
+          Sign up
+        </span>
         <div style={{ display: "flex", gap: 6 }}>
           <img src={questionIcon} alt="help" style={{ width: 18, height: 18 }} />
           <img
@@ -104,33 +105,50 @@ const SignUpPopup = ({ onClose, onSuccess }) => {
           flex: 1,
           display: "grid",
           gridTemplateColumns: "56px 1fr 120px",
-          gap: "16px",
-          padding: "16px",
+          gap: "clamp(10px, 3vw, 16px)",
+          padding: "clamp(12px, 3vw, 16px)",
           alignItems: "start",
         }}
       >
-        {/* Left Icon */}
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <img src={leftIcon} alt="pc" style={{ width: 40 }} />
+        {/* Icon (hidden on mobile) */}
+        <div
+          className="signup-icon"
+          style={{ display: "flex", justifyContent: "center" }}
+        >
+          <img
+            src={leftIcon}
+            alt="pc"
+            style={{
+              width: "40px",
+              height: "auto",
+            }}
+          />
         </div>
 
         {/* Form */}
         <div>
-          <div style={{ fontSize: "18px", marginBottom: "14px" }}>
+          <div
+            style={{
+              fontSize: "clamp(14px, 4vw, 18px)",
+              marginBottom: "clamp(10px, 3vw, 14px)",
+              lineHeight: 1.3,
+            }}
+          >
             Create your account
           </div>
 
           <div
-            className="form-grid"
             style={{
               display: "grid",
-              gridTemplateColumns: "130px 1fr",
-              columnGap: "12px",
-              rowGap: "12px",
+              gridTemplateColumns: "minmax(70px, 90px) 1fr", // ✅ label small, input large
+              columnGap: "clamp(8px, 3vw, 12px)",
+              rowGap: "clamp(10px, 3vw, 14px)",
               alignItems: "center",
             }}
           >
-            <label>Username:</label>
+            <label style={{ fontSize: "clamp(12px, 3.5vw, 14px)" }}>
+              Username:
+            </label>
             <div>
               <input
                 type="text"
@@ -146,7 +164,9 @@ const SignUpPopup = ({ onClose, onSuccess }) => {
               )}
             </div>
 
-            <label>Email:</label>
+            <label style={{ fontSize: "clamp(12px, 3.5vw, 14px)" }}>
+              Email:
+            </label>
             <div>
               <input
                 type="email"
@@ -162,7 +182,9 @@ const SignUpPopup = ({ onClose, onSuccess }) => {
               )}
             </div>
 
-            <label>Password:</label>
+            <label style={{ fontSize: "clamp(12px, 3.5vw, 14px)" }}>
+              Password:
+            </label>
             <div>
               <input
                 type="password"
@@ -185,7 +207,7 @@ const SignUpPopup = ({ onClose, onSuccess }) => {
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: "10px",
+            gap: "clamp(8px, 2.5vw, 12px)",
           }}
         >
           <button style={win95Button} onClick={handleSubmit}>
@@ -197,18 +219,18 @@ const SignUpPopup = ({ onClose, onSuccess }) => {
         </div>
       </div>
 
-      {/* Responsive styles */}
+      {/* Responsive rules */}
       <style>
         {`
           @media (max-width: 600px) {
+            .signup-icon {
+              display: none !important;
+            }
             .signup-body {
-              grid-template-columns: 1fr !important;
+              grid-template-columns: 1fr 100px !important;
             }
-            .form-grid {
-              grid-template-columns: 1fr !important;
-            }
-            .form-grid label {
-              margin-bottom: 4px;
+            .signup-body > div:nth-child(2) > div {
+              grid-template-columns: minmax(60px, 80px) 1fr !important; /* ✅ small label, big input */
             }
           }
         `}
