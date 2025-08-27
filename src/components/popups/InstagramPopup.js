@@ -10,7 +10,7 @@ const InstagramPopup = ({ onClose }) => {
     style={{
       position: "absolute",   // float on screen
       top: "46%",              // center vertically
-      left: "50%",             // center horizontally
+      left: "20%",             // center horizontally
       transform: "translate(-50%, -50%)",
       zIndex: 999,             // stay above taskbar
       width: "450px",

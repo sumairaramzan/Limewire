@@ -1,27 +1,31 @@
-// src/components/SignUpPopup.js
-import React from "react";
+// src/components/LoginUpPopup.js
+import React, { useState } from "react";
 import questionIcon from "../../images/questionmarkButton.svg";
 import closeIcon from "../../images/crossButton.svg";
 import leftIcon from "../../images/pc.svg";
 
-const LoginUpPopup = ({ onClose ,onOpenSignup}) => {
+const LoginUpPopup = ({ onClose, onOpenSignup, onSuccess, registeredUser }) => {
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({});
+
   const inputStyle = {
-    width: "369px",
-    height: "23px",
-    padding: "2px 4px",
+    width: "100%",
+    height: "32px",
+    padding: "4px 6px",
     backgroundColor: "#FFFFFF",
-    // Win95 bevel: light top/left, dark right/bottom
     border: "1px solid #000000",
     borderTopColor: "#DFDFDF",
     borderLeftColor: "#DFDFDF",
     outline: "none",
     fontFamily: "MS Sans Serif, Tahoma, sans-serif",
     fontSize: "14px",
+    boxSizing: "border-box",
   };
 
   const win95Button = {
-    width: "100px",
-    height: "32px",
+    width: "100%",
+    minWidth: "80px",
+    height: "36px",
     backgroundColor: "#C3C7CB",
     border: "1px solid #000",
     boxShadow:
@@ -31,6 +35,35 @@ const LoginUpPopup = ({ onClose ,onOpenSignup}) => {
     fontSize: "14px",
   };
 
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: "" });
+  };
+
+  const handleLogin = () => {
+    let newErrors = {};
+    if (!form.email.trim()) newErrors.email = "Email required";
+    if (!form.password) newErrors.password = "Password required";
+  
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+  
+    // Check credentials
+    if (
+      registeredUser &&
+      form.email === registeredUser.email &&
+      form.password === registeredUser.password
+    ) {
+      onSuccess(registeredUser);   // ✅ handles redirect
+      // ❌ don't call onClose here
+    } else {
+      setErrors({ password: "Invalid email or password" });
+    }
+  };
+  
+
   return (
     <div
       style={{
@@ -38,8 +71,8 @@ const LoginUpPopup = ({ onClose ,onOpenSignup}) => {
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        width: "753px",
-        height: "232px",
+        width: "95vw",
+        maxWidth: "750px",
         backgroundColor: "#C3C7CB",
         fontFamily: "MS Sans Serif, Tahoma, sans-serif",
         display: "flex",
@@ -55,15 +88,12 @@ const LoginUpPopup = ({ onClose ,onOpenSignup}) => {
           alignItems: "center",
           justifyContent: "space-between",
           padding: "6px 8px",
+          fontSize: "16px",
         }}
       >
-        <span style={{ fontSize: "20px", fontWeight: 400 }}>Login</span>
+        <span>Login</span>
         <div style={{ display: "flex", gap: 6 }}>
-          <img
-            src={questionIcon}
-            alt="help"
-            style={{ width: 18, height: 18, cursor: "pointer" }}
-          />
+          <img src={questionIcon} alt="help" style={{ width: 18, height: 18 }} />
           <img
             src={closeIcon}
             alt="close"
@@ -73,7 +103,7 @@ const LoginUpPopup = ({ onClose ,onOpenSignup}) => {
         </div>
       </div>
 
-      {/* Body: 3-column grid */}
+      {/* Body */}
       <div
         style={{
           flex: 1,
@@ -82,75 +112,78 @@ const LoginUpPopup = ({ onClose ,onOpenSignup}) => {
           gap: "16px",
           padding: "16px",
           alignItems: "start",
-          backgroundColor: "#C3C7CB",
         }}
       >
-        {/* Left column: PC icon */}
-        <div>
-          <img src={leftIcon} alt="pc" style={{ width: 40, height: "auto" }} />
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <img src={leftIcon} alt="pc" style={{ width: 40 }} />
         </div>
 
-        {/* Middle column: heading + form */}
         <div>
-          <div
-            style={{
-              color: "#030303",
-              fontSize: "20px",
-              fontWeight: 400,
-              marginBottom: "14px",
-            }}
-          >
+          <div style={{ fontSize: "18px", marginBottom: "14px" }}>
             Enter your email and password
           </div>
 
-          {/* Form grid */}
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "130px 1fr",
+              gridTemplateColumns: "120px 1fr",
               columnGap: "12px",
-              rowGap: "10px",
+              rowGap: "12px",
               alignItems: "center",
             }}
           >
-           
+            <label>Email:</label>
+            <div>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                style={inputStyle}
+              />
+              {errors.email && (
+                <div style={{ color: "red", fontSize: "12px" }}>
+                  {errors.email}
+                </div>
+              )}
+            </div>
 
-            <label
-              style={{ textAlign: "left", fontSize: "16px", color: "#000" }}
-            >
-              Email:
-            </label>
-            <input
-              type="email"
-              placeholder="Ahmad@gmail.com"
-              style={inputStyle}
-            />
-
-            <label
-              style={{ textAlign: "left", fontSize: "16px", color: "#000" }}
-            >
-              Password:
-            </label>
-            <input type="password" placeholder="********" style={inputStyle} />
+            <label>Password:</label>
+            <div>
+              <input
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                style={inputStyle}
+              />
+              {errors.password && (
+                <div style={{ color: "red", fontSize: "12px" }}>
+                  {errors.password}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Right column: buttons */}
         <div
           style={{
             display: "flex",
             flexDirection: "column",
             gap: "10px",
-            alignItems: "stretch",
           }}
         >
-          <button style={win95Button}>Ok</button>
-          <button style={win95Button}>Cancel</button>
+          <button style={win95Button} onClick={handleLogin}>
+            Ok
+          </button>
+          <button style={win95Button} onClick={onClose}>
+            Cancel
+          </button>
           <button
             style={win95Button}
             onClick={() => {
-              onClose();         // close login first
-              onOpenSignup();    // then open signup
+              onClose();
+              onOpenSignup();
             }}
           >
             Sign up

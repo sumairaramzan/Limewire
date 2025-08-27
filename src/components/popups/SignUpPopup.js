@@ -1,22 +1,25 @@
 // src/components/SignUpPopup.js
-import React from "react";
+import React, { useState } from "react";
 import questionIcon from "../../images/questionmarkButton.svg";
 import closeIcon from "../../images/crossButton.svg";
 import leftIcon from "../../images/pc.svg";
 
-const SignUpPopup = ({ onClose }) => {
+const SignUpPopup = ({ onClose, onSuccess }) => {
+  const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const [errors, setErrors] = useState({});
+
   const inputStyle = {
-    width: "369px",
+    width: "100%",
     height: "23px",
     padding: "2px 4px",
     backgroundColor: "#FFFFFF",
-    // Win95 bevel: light top/left, dark right/bottom
     border: "1px solid #000000",
     borderTopColor: "#DFDFDF",
     borderLeftColor: "#DFDFDF",
     outline: "none",
     fontFamily: "MS Sans Serif, Tahoma, sans-serif",
     fontSize: "14px",
+    boxSizing: "border-box",
   };
 
   const win95Button = {
@@ -31,6 +34,32 @@ const SignUpPopup = ({ onClose }) => {
     fontSize: "14px",
   };
 
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: "" });
+  };
+
+  const handleSubmit = () => {
+    let newErrors = {};
+    if (!form.username.trim()) newErrors.username = "Username required";
+    if (!form.email.trim()) newErrors.email = "Email required";
+    else if (!/\S+@\S+\.\S+/.test(form.email))
+      newErrors.email = "Invalid email format";
+    if (!form.password) newErrors.password = "Password required";
+    else if (form.password.length < 6)
+      newErrors.password = "At least 6 characters";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    // ✅ Pass user data to parent (WindowsScreen)
+    // Parent handles setting state + redirect to Limewire
+    onSuccess(form);
+    // ❌ don't call onClose here, it cancels the redirect
+  };
+
   return (
     <div
       style={{
@@ -39,7 +68,7 @@ const SignUpPopup = ({ onClose }) => {
         left: "50%",
         transform: "translate(-50%, -50%)",
         width: "753px",
-        height: "232px",
+        height: "auto",
         backgroundColor: "#C3C7CB",
         fontFamily: "MS Sans Serif, Tahoma, sans-serif",
         display: "flex",
@@ -59,11 +88,7 @@ const SignUpPopup = ({ onClose }) => {
       >
         <span style={{ fontSize: "20px", fontWeight: 400 }}>Sign up</span>
         <div style={{ display: "flex", gap: 6 }}>
-          <img
-            src={questionIcon}
-            alt="help"
-            style={{ width: 18, height: 18, cursor: "pointer" }}
-          />
+          <img src={questionIcon} alt="help" style={{ width: 18, height: 18 }} />
           <img
             src={closeIcon}
             alt="close"
@@ -73,7 +98,7 @@ const SignUpPopup = ({ onClose }) => {
         </div>
       </div>
 
-      {/* Body: 3-column grid */}
+      {/* Body */}
       <div
         style={{
           flex: 1,
@@ -81,29 +106,17 @@ const SignUpPopup = ({ onClose }) => {
           gridTemplateColumns: "56px 1fr 120px",
           gap: "16px",
           padding: "16px",
-          alignItems: "start",
-          backgroundColor: "#C3C7CB",
         }}
       >
-        {/* Left column: PC icon */}
         <div>
-          <img src={leftIcon} alt="pc" style={{ width: 40, height: "auto" }} />
+          <img src={leftIcon} alt="pc" style={{ width: 40 }} />
         </div>
 
-        {/* Middle column: heading + form */}
         <div>
-          <div
-            style={{
-              color: "#030303",
-              fontSize: "20px",
-              fontWeight: 400,
-              marginBottom: "14px",
-            }}
-          >
-            Enter your email and password
+          <div style={{ fontSize: "18px", marginBottom: "14px" }}>
+            Create your account
           </div>
 
-          {/* Form grid */}
           <div
             style={{
               display: "grid",
@@ -113,44 +126,69 @@ const SignUpPopup = ({ onClose }) => {
               alignItems: "center",
             }}
           >
-            <label
-              style={{ textAlign: "left", fontSize: "16px", color: "#000" }}
-            >
-              User name:
-            </label>
-            <input type="text" placeholder="Ahmad" style={inputStyle} />
+            <label>Username:</label>
+            <div>
+              <input
+                type="text"
+                name="username"
+                value={form.username}
+                onChange={handleChange}
+                style={inputStyle}
+              />
+              {errors.username && (
+                <div style={{ color: "red", fontSize: "12px" }}>
+                  {errors.username}
+                </div>
+              )}
+            </div>
 
-            <label
-              style={{ textAlign: "left", fontSize: "16px", color: "#000" }}
-            >
-              Email:
-            </label>
-            <input
-              type="email"
-              placeholder="Ahmad@gmail.com"
-              style={inputStyle}
-            />
+            <label>Email:</label>
+            <div>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                style={inputStyle}
+              />
+              {errors.email && (
+                <div style={{ color: "red", fontSize: "12px" }}>
+                  {errors.email}
+                </div>
+              )}
+            </div>
 
-            <label
-              style={{ textAlign: "left", fontSize: "16px", color: "#000" }}
-            >
-              Password:
-            </label>
-            <input type="password" placeholder="********" style={inputStyle} />
+            <label>Password:</label>
+            <div>
+              <input
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                style={inputStyle}
+              />
+              {errors.password && (
+                <div style={{ color: "red", fontSize: "12px" }}>
+                  {errors.password}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Right column: buttons */}
         <div
           style={{
             display: "flex",
             flexDirection: "column",
             gap: "10px",
-            alignItems: "stretch",
           }}
         >
-          <button style={win95Button}>Ok</button>
-          <button style={win95Button}>Cancel</button>
+          <button style={win95Button} onClick={handleSubmit}>
+            Ok
+          </button>
+          <button style={win95Button} onClick={onClose}>
+            Cancel
+          </button>
         </div>
       </div>
     </div>

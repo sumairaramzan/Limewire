@@ -9,12 +9,14 @@ import LimewirePopup from "./popups/LimewirePopup";
 import PopupPlayer from "./popups/PopupPlayer";
 import PopupPlayerMinimized from "./popups/PopupPlayerMinimized";
 import InstagramPopup from "./popups/InstagramPopup";
-import insta from "../images/insta.svg"
-import paint from "../images/MS_Paint.svg"
+import insta from "../images/insta.svg";
+import paint from "../images/MS_Paint.svg";
 import PaintPopup from "./popups/PaintPopup";
 
 const WindowsScreen = () => {
   const [activePopup, setActivePopup] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // 🔑 new state
+  const [registeredUser, setRegisteredUser] = useState(null);
 
   const baseButtonStyle = {
     backgroundColor: "#C3C3C3",
@@ -75,9 +77,12 @@ const WindowsScreen = () => {
 
             {/* Limewire */}
             <Button
+              disabled={!isAuthenticated} // 🔒 disable until login/signup
               style={{
                 ...baseButtonStyle,
                 maxWidth: "200px",
+                opacity: isAuthenticated ? 1 : 0.5, // faded when disabled
+                cursor: isAuthenticated ? "pointer" : "not-allowed",
                 boxShadow:
                   "1.68px 1.68px 0px #B1B1B1 inset, -1.68px -1.68px 0px #7E7E7E inset, 0.84px 0.84px 0px #F0F0F0 inset, -0.84px -0.84px 0px #262626 inset",
               }}
@@ -97,10 +102,14 @@ const WindowsScreen = () => {
               Limewire
             </Button>
 
+            {/* Instagram */}
             <Button
+              disabled={!isAuthenticated}
               style={{
                 ...baseButtonStyle,
                 maxWidth: "200px",
+                opacity: isAuthenticated ? 1 : 0.5,
+                cursor: isAuthenticated ? "pointer" : "not-allowed",
                 boxShadow:
                   "1.68px 1.68px 0px #B1B1B1 inset, -1.68px -1.68px 0px #7E7E7E inset, 0.84px 0.84px 0px #F0F0F0 inset, -0.84px -0.84px 0px #262626 inset",
               }}
@@ -117,28 +126,32 @@ const WindowsScreen = () => {
               />
               Instagram
             </Button>
-            <Button
-  style={{
-    ...baseButtonStyle,
-    maxWidth: "200px",
-    boxShadow:
-      "1.68px 1.68px 0px #B1B1B1 inset, -1.68px -1.68px 0px #7E7E7E inset, 0.84px 0.84px 0px #F0F0F0 inset, -0.84px -0.84px 0px #262626 inset",
-  }}
-  onClick={() =>
-    setActivePopup((prev) => (prev === "paint" ? null : "paint"))
-  }
->
-  <img
-    src={paint}
-    alt="icon"
-    style={{ marginRight: "6px", width: "14px", height: "14px" }}
-  />
-  Paint
-</Button>
 
+            {/* Paint */}
+            <Button
+              disabled={!isAuthenticated}
+              style={{
+                ...baseButtonStyle,
+                maxWidth: "200px",
+                opacity: isAuthenticated ? 1 : 0.5,
+                cursor: isAuthenticated ? "pointer" : "not-allowed",
+                boxShadow:
+                  "1.68px 1.68px 0px #B1B1B1 inset, -1.68px -1.68px 0px #7E7E7E inset, 0.84px 0.84px 0px #F0F0F0 inset, -0.84px -0.84px 0px #262626 inset",
+              }}
+              onClick={() =>
+                setActivePopup((prev) => (prev === "paint" ? null : "paint"))
+              }
+            >
+              <img
+                src={paint}
+                alt="icon"
+                style={{ marginRight: "6px", width: "14px", height: "14px" }}
+              />
+              Paint
+            </Button>
           </div>
 
-          {/* Clock (just display, no popup) */}
+          {/* Clock */}
           <div
             style={{
               ...baseButtonStyle,
@@ -158,26 +171,38 @@ const WindowsScreen = () => {
           </div>
         </div>
       </Container>
-
-      {/* Popups */}
       {activePopup === "login" && (
-        <LoginUpPopup
-          onClose={() => setActivePopup(null)}
-          onOpenSignup={() => setActivePopup("signup")}
-        />
-      )}
+  <LoginUpPopup
+    onClose={() => setActivePopup(null)}
+    onOpenSignup={() => setActivePopup("signup")}
+    registeredUser={registeredUser}
+    onSuccess={(user) => {
+      setIsAuthenticated(true);
+      setActivePopup("limewireMax"); // auto open
+    }}
+  />
+)}
 
-      {activePopup === "signup" && (
-        <SignUpPopup onClose={() => setActivePopup(null)} />
-      )}
+
+
+{activePopup === "signup" && (
+  <SignUpPopup
+    // onClose={() => setActivePopup(null)}
+    onSuccess={(user) => {
+      setRegisteredUser(user);
+      setIsAuthenticated(true);
+      setActivePopup("limewireMax"); // auto open
+    }}
+  />
+)}
 
       {/* Limewire */}
-      {activePopup === "limewireMax" && (
-        <LimewirePopup
-          onClose={() => setActivePopup(null)}
-          onOpenPlayer={() => setActivePopup("playerMax")}
-        />
-      )}
+      {isAuthenticated && activePopup === "limewireMax" && (
+  <LimewirePopup
+    onClose={() => setActivePopup(null)}
+    onOpenPlayer={() => setActivePopup("playerMax")}
+  />
+)}
 
       {/* Player (maximized) */}
       {activePopup === "playerMax" && (
@@ -195,12 +220,14 @@ const WindowsScreen = () => {
           onMaximize={() => setActivePopup("playerMax")}
         />
       )}
+
       {activePopup === "instagram" && (
         <InstagramPopup onClose={() => setActivePopup(null)} />
       )}
+
       {activePopup === "paint" && (
-  <PaintPopup onClose={() => setActivePopup(null)} />
-)}
+        <PaintPopup onClose={() => setActivePopup(null)} />
+      )}
     </div>
   );
 };

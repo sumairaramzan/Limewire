@@ -66,10 +66,10 @@ const PaintPopup = ({ onClose }) => {
       style={{
         position: "absolute",
         top: "46%",
-        left: "50%",
+        left: "69%",
         transform: "translate(-50%, -50%)",
-        width: "70vw",
-        maxWidth: "700px",
+        width: "95vw",
+        maxWidth: "800px",
         height: "90vh",
         maxHeight: "95vh",
         background: "#C0C0C0",
@@ -97,6 +97,7 @@ const PaintPopup = ({ onClose }) => {
           color: "#fff",
           fontSize: "14px",
           padding: "0 6px",
+          flexShrink: 0,
         }}
       >
         <span>Untitled - Paint</span>
@@ -121,7 +122,8 @@ const PaintPopup = ({ onClose }) => {
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
             flexShrink: 0,
-            width: "80px",
+            width: "18vw",
+            maxWidth: "90px",
             overflowY: "auto",
             gap: "0px",
           }}
@@ -132,9 +134,10 @@ const PaintPopup = ({ onClose }) => {
               style={{
                 cursor: "pointer",
                 display: "flex",
-                alignItems: "stretch",
+                alignItems: "center",
                 justifyContent: "center",
                 border: "1px solid #A0A0A0",
+                padding: "4px",
               }}
               title={tool.name}
             >
@@ -142,8 +145,8 @@ const PaintPopup = ({ onClose }) => {
                 src={tool.icon}
                 alt={tool.name}
                 style={{
-                  width: "100%",
-                  height: "100%",
+                  width: "70%",
+                  height: "70%",
                   objectFit: "contain",
                 }}
               />
@@ -182,15 +185,16 @@ const PaintPopup = ({ onClose }) => {
           padding: "6px",
           background: "#C0C0C0",
           borderTop: "2px solid #808080",
+          flexShrink: 0,
         }}
       >
         <div
           style={{
-            display: "grid",
-            gridTemplateRows: "repeat(2, 24px)", // ✅ only 2 rows
-            gridAutoFlow: "column",              // ✅ fill left → right
-            gap: "0",
+            display: "flex",
+            flexWrap: "wrap",
             justifyContent: "center",
+            alignItems: "center",
+            gap: "2px",
           }}
         >
           {colors.map((c, i) => (
@@ -198,13 +202,16 @@ const PaintPopup = ({ onClose }) => {
               key={i}
               style={{
                 background: c,
-                width: "24px",
-                height: "24px",
+                width: "clamp(18px, 5vw, 24px)", // responsive size
+                height: "clamp(18px, 5vw, 24px)",
                 cursor: "pointer",
                 boxShadow: `
                   -2px -2px 0px 0px #F0F0F0 inset,
                   2px 2px 0px 0px #262626 inset
                 `,
+                flex: "1 0 auto",
+                maxWidth: "24px",
+                maxHeight: "24px",
               }}
             />
           ))}
